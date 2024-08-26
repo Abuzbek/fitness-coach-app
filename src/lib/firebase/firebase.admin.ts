@@ -1,8 +1,8 @@
 //Import Firebase Admin Service Account with $env functionality in Svelte
 import { refreshToken } from 'firebase-admin/app';
-import FIREBASE_ADMIN_KEY from './key.json';
 //Import firebase admin SDK
 import admin from 'firebase-admin';
+import { FIREBASE_ADMIN_KEY } from '$env/static/private';
 
 let firebaseAdmin: admin.app.App;
 let firebaseAdminAuth: admin.auth.Auth;
