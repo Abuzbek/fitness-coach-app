@@ -1,19 +1,38 @@
-<script>
-	import Header from './Header.svelte';
+<script lang="ts">
+	import { onMount } from 'svelte';
 	import '../app.css';
+	import { firebaseAuth } from '$lib/firebase/firebase.app';
+	import { QueryClientProvider } from '@tanstack/svelte-query';
+	import { SvelteQueryDevtools } from '@tanstack/svelte-query-devtools';
+	import type { PageData } from './$types';
+
+	onMount(() => {
+		firebaseAuth?.onIdTokenChanged(async (user) => {
+			// send the token to the server
+			if (user) {
+				const token = await user?.getIdToken();
+				await fetch('/api/user', {
+					method: 'POST',
+					body: JSON.stringify({ token: token })
+				});
+			}
+		});
+		firebaseAuth?.onAuthStateChanged(async (user) => {
+			console.log(user);
+		});
+	});
+
+	export let data: PageData;
 </script>
 
-<div class="app">
-	<Header />
-
-	<main>
-		<slot />
-	</main>
-
-	<footer>
-		<p>visit <a href="https://kit.svelte.dev">kit.svelte.dev</a> to learn SvelteKit</p>
-	</footer>
-</div>
+<QueryClientProvider client={data.queryClient}>
+	<div class="app">
+		<main>
+			<slot />
+		</main>
+	</div>
+	<SvelteQueryDevtools />
+</QueryClientProvider>
 
 <style>
 	.app {
@@ -31,23 +50,5 @@
 		max-width: 64rem;
 		margin: 0 auto;
 		box-sizing: border-box;
-	}
-
-	footer {
-		display: flex;
-		flex-direction: column;
-		justify-content: center;
-		align-items: center;
-		padding: 12px;
-	}
-
-	footer a {
-		font-weight: bold;
-	}
-
-	@media (min-width: 480px) {
-		footer {
-			padding: 12px 0;
-		}
 	}
 </style>
