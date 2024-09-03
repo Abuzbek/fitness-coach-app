@@ -1,38 +1,14 @@
 <script lang="ts">
-  import { onMount } from 'svelte';
   import '../app.css';
-  import { firebaseAuth } from '$lib/firebase/firebase.app';
-  import { QueryClientProvider } from '@tanstack/svelte-query';
-  import { SvelteQueryDevtools } from '@tanstack/svelte-query-devtools';
-  import type { PageData } from './$types';
+  import { FirebaseApp } from 'sveltefire';
 
-  onMount(() => {
-    firebaseAuth?.onIdTokenChanged(async (user) => {
-      // send the token to the server
-      if (user) {
-        const token = await user?.getIdToken();
-        await fetch('/api/user', {
-          method: 'POST',
-          body: JSON.stringify({ token: token })
-        });
-      }
-    });
-    firebaseAuth?.onAuthStateChanged(async (user) => {
-      console.log(user);
-    });
-  });
-
-  export let data: PageData;
+  // let auth = firebaseAuth;
+  // let firestore = firebaseDB;
 </script>
 
-<QueryClientProvider client={data.queryClient}>
-  <div class="app">
-    <main>
-      <slot />
-    </main>
-  </div>
-  <SvelteQueryDevtools />
-</QueryClientProvider>
+<!-- <FirebaseApp {auth} {firestore}> -->
+  <slot />
+<!-- </FirebaseApp> -->
 
 <style>
   .app {
