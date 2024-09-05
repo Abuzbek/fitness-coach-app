@@ -1,9 +1,9 @@
 // Import the functions you need from the SDKs you need
-// import { initializeApp, type FirebaseApp } from 'firebase/app';
-// import { getAnalytics, type Analytics } from 'firebase/analytics';
-// import { getAuth, type Auth } from 'firebase/auth';
-// import { Firestore, getFirestore } from 'firebase/firestore';
-// import { getStorage, type FirebaseStorage } from 'firebase/storage';
+import { initializeApp, type FirebaseApp } from 'firebase/app';
+import { getAnalytics, type Analytics } from 'firebase/analytics';
+import { getAuth, type Auth } from 'firebase/auth';
+import { Firestore, getFirestore } from 'firebase/firestore';
+import { getStorage, type FirebaseStorage } from 'firebase/storage';
 // TODO: Add SDKs for Firebase products that you want to use
 // https://firebase.google.com/docs/web/setup#available-libraries
 
@@ -20,10 +20,10 @@ export const firebaseConfig = {
   measurementId: "G-KFSEJHZMDK"
 };
 
-// const firebaseApp: FirebaseApp = initializeApp(firebaseConfig);
-// const firebaseAnalytics: Analytics = getAnalytics(firebaseApp);
-// const firebaseAuth: Auth = getAuth(firebaseApp);
-// const firebaseDB: Firestore = getFirestore(firebaseApp);
-// const firebaseStorage: FirebaseStorage = getStorage(firebaseApp);
+const firebaseApp: FirebaseApp = initializeApp(firebaseConfig);
+export const firebaseAnalytics: Analytics = getAnalytics(firebaseApp);
+export const firebaseAuth: Auth = getAuth(firebaseApp);
+export const firebaseDB: Firestore = getFirestore(firebaseApp);
+export const firebaseStorage: FirebaseStorage = getStorage(firebaseApp);
 // // Initialize Firebase
 // export { firebaseApp, firebaseAnalytics, firebaseAuth, firebaseDB, firebaseStorage };

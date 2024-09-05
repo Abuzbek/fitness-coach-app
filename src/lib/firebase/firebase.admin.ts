@@ -1,15 +1,20 @@
-//Import Firebase Admin Service Account with $env functionality in Svelte
-import { initializeApp, refreshToken } from 'firebase-admin/app';
-import { getFirestore } from 'firebase-admin/firestore';
-//Import firebase admin SDK
-import { firebaseConfig } from './firebase.app';
-import { FIREBASE_ADMIN_KEY } from '$env/static/private';
+// src/lib/firebase-admin.js
+import admin from 'firebase-admin';
+import serviceAccount from './admin-key.json';
+// Ensure Firebase Admin is not initialized multiple times in serverless environments
+export const app = (() => {
+  admin.apps.map((a) => a?.delete());
+  const adminFB = admin.initializeApp({
+    credential: admin.credential.cert({
+      clientEmail: serviceAccount.client_email,
+      privateKey: serviceAccount.private_key,
+      projectId: serviceAccount.project_id
+    }),
+    databaseURL: 'https://fitness-app-b1341-default-rtdb.firebaseio.com' // replace with your databaseURL if needed
+  });
+  console.log(adminFB.auth().getUserByEmail('abuzcoder@gmail.com'));
 
-/**
- * create firebase admin singleton
- */
-export const firebaseApp = initializeApp({
-  credential: refreshToken(FIREBASE_ADMIN_KEY),
-  ...firebaseConfig
-});
-export const db = getFirestore(firebaseApp);
+  return adminFB;
+})();
+
+export const db = app.firestore();

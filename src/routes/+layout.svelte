@@ -1,14 +1,23 @@
 <script lang="ts">
+  import { onMount } from 'svelte';
   import '../app.css';
   import { FirebaseApp } from 'sveltefire';
+  import { firebaseAuth, firebaseDB } from '$lib/firebase/firebase.app';
+  import type { Firestore } from 'firebase/firestore';
+  import type { Auth } from 'firebase/auth';
 
-  // let auth = firebaseAuth;
-  // let firestore = firebaseDB;
+  let auth: Auth|undefined;
+  let firestore: Firestore|undefined;
+
+  onMount(()=> {
+    auth = firebaseAuth;
+    firestore = firebaseDB;
+  })
 </script>
 
-<!-- <FirebaseApp {auth} {firestore}> -->
+<FirebaseApp {auth} {firestore}>
   <slot />
-<!-- </FirebaseApp> -->
+</FirebaseApp>
 
 <style>
   .app {

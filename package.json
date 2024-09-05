@@ -40,6 +40,8 @@
   "dependencies": {
     "@tanstack/svelte-query": "^5.53.0",
     "@tanstack/svelte-query-devtools": "^5.54.0",
+    "google-auth-library": "^9.14.1",
+    "googleapis": "^144.0.0",
     "sveltefire": "^0.4.5"
   }
 }
