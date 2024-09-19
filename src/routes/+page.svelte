@@ -1,11 +1,11 @@
-<script lang="ts">
-    export let data;
+<script>
+	export let data;
+	$: ({ users } = data);
 </script>
 
-<svelte:head>
-  <title>Home</title>
-  <meta name="description" content="Svelte demo app" />
-</svelte:head>
-<pre>{JSON.stringify(data,  null, 2)}</pre>
-<style>
-</style>
+<h1>Welcome to Supabase!</h1>
+<ul>
+	{#each users as user}
+		<li>{user.name}</li>
+	{/each}
+</ul>
