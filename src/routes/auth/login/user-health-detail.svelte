@@ -8,9 +8,18 @@
   let weightValues: number[] = Array.from({ length: 200 }, (_, i) => i + 30); // 30 to 230 kg
   let heightValues: number[] = Array.from({ length: 121 }, (_, i) => i + 100); // 100 to 220 cm
 
-  let selectedAge: string = ''; // Default age
-  let selectedWeight: string = ''; // Default weight
-  let selectedHeight: string = ''; // Default height
+  let user_data = {
+    age: '',
+    weight: '',
+    height: '',
+    gender: '',
+    goal: '',
+    body_type: ''
+  }
+
+  let age: string = ''; // Default age
+  let weight: string = ''; // Default weight
+  let height: string = ''; // Default height
   const uc = (str: string) => str.toUpperCase();
   let steps = [
     {
@@ -20,7 +29,8 @@
         options: [
           { label: 'MALE', value: 'male' },
           { label: 'FEMALE', value: 'female' }
-        ]
+        ],
+        selected: user_data.gender
       }
     },
     {
@@ -33,20 +43,8 @@
           { label: uc('Improve Endurance'), value: 'improve-endurance' },
           { label: uc('Increase Strength'), value: 'increase-strength' },
           { label: uc('Improve Flexibility'), value: 'improve-flexibility' }
-        ]
-      }
-    },
-    {
-      title: 'WHAT MOTIVATES YOU TO EXERCISE?',
-      component: RadioCardGroup,
-      props: {
-        options: [
-          { label: uc('Health & fitness'), value: 'health_fitness' },
-          { label: uc('Stress relief'), value: 'stress_relief' },
-          { label: uc('Physical goals'), value: 'physical_goals' },
-          { label: uc('More energy'), value: 'more_energy' },
-          { label: uc('Discipline & routine'), value: 'discipline_routine' }
-        ]
+        ],
+        selected: user_data.goal
       }
     },
     {
@@ -57,27 +55,15 @@
           { label: uc('Skinny'), value: 'skinny' },
           { label: uc('Average'), value: 'average' },
           { label: uc('Heavier'), value: 'heavier' }
-        ]
-      }
-    },
-    {
-      title: uc('choose a target body type?'),
-      component: RadioCardGroup,
-      props: {
-        options: [
-          { label: uc('Lean'), value: 'lean' },
-          { label: uc('Athletic'), value: 'athletic' },
-          { label: uc('Muscular'), value: 'muscular' },
-          { label: uc('Toned'), value: 'toned' },
-          { label: uc('Bulkier'), value: 'bulkier' }
-        ]
+        ],
+        selected: user_data.body_type
       }
     },
     {
       title: 'WHAT IS YOUR AGE?',
       component: Input,
       props: {
-        value: selectedAge,
+        value: user_data.age,
         type: 'number',
         min: ageValues[0],
         max: ageValues.at(-1)
@@ -87,7 +73,7 @@
       title: 'HOW TALL ARE YOU?',
       component: Input,
       props: {
-        value: selectedHeight,
+        value: user_data.height,
         type: 'number',
         min: heightValues[0],
         max: heightValues.at(-1)
@@ -97,7 +83,7 @@
       title: 'WHAT IS YOUR CURRENT WEIGHT?',
       component: Input,
       props: {
-        value: selectedWeight,
+        value: user_data.weight,
         type: 'number',
         min: weightValues[0],
         max: weightValues.at(-1)
@@ -129,15 +115,18 @@
         disabled={currentStep <= 0}
       >
         <ChevronLeft />
-        <span>Prev</span>
+        <span class="uppercase">Prev</span>
       </Button>
       <Button
-        on:click={next}
-        variant={allowNext ? 'ghost' : 'default'}
+        on:click={!allowNext ? next : ()=> {}}
+        variant={'default'}
         class="flex items-center justify-center pr-3"
-        disabled={currentStep >= steps.length - 1}
       >
-        <span>Next</span>
+        {#if !allowNext}
+           <span class="uppercase">Next</span>
+        {:else}
+           <span class="uppercase">Finish</span>
+        {/if}
         <ChevronRight />
       </Button>
     </Dialog.Footer>
