@@ -41,6 +41,7 @@
   },
   "type": "module",
   "dependencies": {
+    "@prisma/client": "^5.19.1",
     "@supabase/ssr": "^0.5.1",
     "@supabase/supabase-js": "^2.45.4",
     "bcrypt": "^5.1.1",
@@ -49,6 +50,7 @@
     "formsnap": "^1.0.1",
     "google-auth-library": "^9.14.1",
     "googleapis": "^144.0.0",
+    "prisma": "^5.19.1",
     "svelte-radix": "^1.1.1",
     "sveltekit-superforms": "^2.19.0",
     "tailwind-merge": "^2.5.2",
