@@ -1,18 +1,10 @@
 import { PUBLIC_SUPABASE_ANON_KEY, PUBLIC_SUPABASE_URL } from '$env/static/public';
 import { PrismaClient } from '@prisma/client';
 import { createServerClient } from '@supabase/ssr';
-import { type Handle, redirect } from '@sveltejs/kit';
+import { type Handle , type RequestEvent, redirect } from '@sveltejs/kit';
 import { sequence } from '@sveltejs/kit/hooks';
-import jwt from 'jsonwebtoken';
 
-const SECRET_KEY = process.env.JWT_SECRET || 'your-secret-key';
-
-interface JwtPayload {
-  id: number;
-  email: string;
-  iat: number;
-  exp: number;
-}
+const PROTECTED_ROUTES = ['/private'];
 
 const supabase: Handle = async ({ event, resolve }) => {
   /**
@@ -77,7 +69,7 @@ const authGuard: Handle = async ({ event, resolve }) => {
   event.locals.session = session;
   event.locals.user = user;
 
-  if (!event.locals.session && event.url.pathname.startsWith('/private')) {
+  if (!event.locals.session && isProtectedRoute(event) && !event.locals.user) {
     redirect(303, '/auth/login');
   }
 
@@ -88,22 +80,27 @@ const authGuard: Handle = async ({ event, resolve }) => {
   return resolve(event);
 };
 
-const user: Handle = async ({ event, resolve }) => {
-  const token = event.cookies.get('jwt');
+// const user: Handle = async ({ event, resolve }) => {
+//   const token = event.cookies.get('jwt');
 
-  if (token) {
-    try {
-      const user = jwt.verify(token, SECRET_KEY) as JwtPayload;
-      event.locals.public_user = user;
-    } catch {
-      event.locals.public_user = null;
-    }
-  } else {
-    event.locals.user = null;
-  }
+//   if (token) {
+//     try {
+//       const user = jwt.verify(token, SECRET_KEY) as JwtPayload;
+//       event.locals.public_user = user;
+//     } catch {
+//       event.locals.public_user = null;
+//     }
+//   } else {
+//     event.locals.user = null;
+//   }
 
-  return await resolve(event);
-};
+//   if (isProtectedRoute(event) && !event.locals.user) {
+//     // Redirect unauthenticated users to the login page
+//     throw redirect(302, '/auth/login');
+//   }
+
+//   return await resolve(event);
+// };
 
 const prisma: Handle = async ({ event, resolve }) => {
   const prisma = new PrismaClient();
@@ -113,4 +110,8 @@ const prisma: Handle = async ({ event, resolve }) => {
   return await resolve(event);
 };
 
-export const handle: Handle = sequence(supabase, authGuard, user, prisma);
+function isProtectedRoute(event: RequestEvent): boolean {
+  return PROTECTED_ROUTES.some((route) => event.url.pathname.startsWith(route));
+}
+
+export const handle: Handle = sequence(supabase, authGuard, prisma);
