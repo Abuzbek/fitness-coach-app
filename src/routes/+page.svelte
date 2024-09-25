@@ -1,11 +1,12 @@
-<script>
+<script lang="ts">
 	export let data;
 	$: ({ users } = data);
 </script>
 
 <h1>Welcome to Supabase!</h1>
-<ul>
+<!-- <ul>
 	{#each users as user}
-		<li>{user.name}</li>
+		<li>{user.full_name}</li>
+		<li>{user.email}</li>
 	{/each}
-</ul>
+</ul> -->

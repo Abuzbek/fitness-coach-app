@@ -513,6 +513,7 @@ model public_users {
   id                                   Int                       @id @default(autoincrement())
   full_name                            String                    @db.VarChar(100)
   email                                String                    @unique @db.VarChar(100)
+  password                             String
   date_of_birth                        DateTime?                 @db.Date
   gender                               String?                   @db.VarChar(10)
   role                                 String?                   @default("user") @db.VarChar(20)
