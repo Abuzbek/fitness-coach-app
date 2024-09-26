@@ -15,19 +15,20 @@ export const actions: Actions = {
     const name = formData.get('name') as string;
     const email = formData.get('email') as string;
     const password = formData.get('password') as string;
-    const { data, error } = await supabase.auth.signUp({ email, password });
-    console.log(data.user?.id);
+    const user_health_detail = formData.get('user_health_detail') as string;
+    // const { data, error } = await supabase.auth.signUp({ email, password });
+    console.log(user_health_detail);
 
-    const { data: userData, error: userError } = await supabase
-      .from('users')
-      .insert([{ user_id: data.user?.id, full_name: name, email, password_hash: password }])
-      .select();
-    console.log(userData);
-    if (error || userError) {
-      console.error(error, userError);
-      redirect(303, '/auth/error');
-    } else {
-      redirect(303, '/');
-    }
+    // const { data: userData, error: userError } = await supabase
+    //   .from('users')
+    //   .insert([{ user_id: data.user?.id, full_name: name, email, password_hash: password }])
+    //   .select();
+    // console.log(userData);
+    // if (error || userError) {
+    //   console.error(error, userError);
+    //   redirect(303, '/auth/error');
+    // } else {
+    //   redirect(303, '/');
+    // }
   }
 };
