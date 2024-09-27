@@ -6,11 +6,11 @@
     label: string;
     value: string;
   }
-  export let options: Options[] | undefined = undefined;
-  export let selected: string | undefined = undefined;
+  export let options: Options[];
+  export let selected: string;
 </script>
 
-<RadioGroup.Root value={selected}>
+<RadioGroup.Root bind:value={selected}>
   {#if options}
     {#each options as option (option.value)}
       <RadioGroup.Item

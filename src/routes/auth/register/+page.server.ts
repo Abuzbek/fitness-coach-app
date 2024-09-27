@@ -16,19 +16,23 @@ export const actions: Actions = {
     const email = formData.get('email') as string;
     const password = formData.get('password') as string;
     const user_health_detail = formData.get('user_health_detail') as string;
-    // const { data, error } = await supabase.auth.signUp({ email, password });
-    console.log(user_health_detail);
+    const { data, error } = await supabase.auth.signUp({ email, password });
+    const { age, weight, height, gender, goal, body_type } = JSON.parse(user_health_detail);
 
-    // const { data: userData, error: userError } = await supabase
-    //   .from('users')
-    //   .insert([{ user_id: data.user?.id, full_name: name, email, password_hash: password }])
-    //   .select();
-    // console.log(userData);
-    // if (error || userError) {
-    //   console.error(error, userError);
-    //   redirect(303, '/auth/error');
-    // } else {
-    //   redirect(303, '/');
-    // }
+    const { data: userData, error: userError } = await supabase
+      .from('users')
+      .insert([{ user_id: data.user?.id, full_name: name, email}])
+      .select();
+    const { error: userDataError } = await supabase
+      .from('user_data')
+      .insert([{ user_id: userData?.[0].id, age, weight, height, gender, goal, body_type }])
+      .select();
+    console.log(userData);
+    if (error || userError || userDataError) {
+      console.error(error, userError, userDataError);
+      redirect(303, '/auth/error');
+    } else {
+      redirect(303, '/');
+    }
   }
 };

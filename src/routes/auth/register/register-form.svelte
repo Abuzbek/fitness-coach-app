@@ -7,12 +7,7 @@
   import Icon from '@iconify/svelte';
   import { page } from '$app/stores';
 
-  export const user_health_detail: string | undefined = undefined;
-
-  $: {
-    console.log(user_health_detail);
-  }
-  
+  export let user_health_detail: string;
 
   let showPassword = false;
 

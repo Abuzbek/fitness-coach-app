@@ -1,9 +1,6 @@
 <script context="module" lang="ts">
   export interface ISteps {
     title: string;
-    component: any;
-    props?: any;
-    type?: string;
   }
 </script>
 
@@ -11,11 +8,14 @@
   import Button from '$lib/components/ui/button/button.svelte';
   import * as Dialog from '$lib/components/ui/dialog';
   import { ChevronLeft, ChevronRight } from 'svelte-radix';
-  export let steps : ISteps[];
-  let currentStep = 0;
+  export let steps: ISteps[];
+  export const step: number = 0;
+  export const next: any = () => (currentStep += 1);
+  export const prev: any = () => (currentStep -= 1);
 
-  const next = () => (currentStep += 1);
-  const prev = () => (currentStep -= 1);
+  let currentStep: number;
+
+  $: currentStep = step;
 
   $: allowNext = currentStep >= steps.length - 1;
   $: allowPrev = currentStep <= 0;
@@ -27,7 +27,7 @@
       <Dialog.Title>{steps[currentStep].title}</Dialog.Title>
     </Dialog.Header>
     <div class="flex-grow h-full">
-      <svelte:component this={steps[currentStep].component} {...steps[currentStep].props} />
+      <slot name="body" {currentStep} {next} {prev} />
     </div>
     <Dialog.Footer class="flex items-center justify-between">
       <Button
@@ -39,18 +39,16 @@
         <ChevronLeft />
         <span class="uppercase">prev</span>
       </Button>
-      <Button
-        on:click={!allowNext ? next : () => {}}
-        variant={'default'}
-        class="flex items-center justify-center pr-3"
-      >
-        {#if !allowNext}
-          <span class="uppercase">next</span>
-        {:else}
-          <span class="uppercase">finish</span>
-        {/if}
-        <ChevronRight />
-      </Button>
+      <slot name="next" {currentStep}>
+        <Button on:click={next} variant={'default'} class="flex items-center justify-center pr-3">
+          {#if !allowNext}
+            <span class="uppercase">next</span>
+          {:else}
+            <span class="uppercase">finish</span>
+          {/if}
+          <ChevronRight />
+        </Button>
+      </slot>
     </Dialog.Footer>
   </Dialog.Content>
 </Dialog.Root>
