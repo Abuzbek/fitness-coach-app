@@ -1,6 +1,7 @@
 <script context="module" lang="ts">
   export interface ISteps {
     title: string;
+    disabledNext: boolean;
   }
 </script>
 
@@ -23,32 +24,32 @@
 
 <Dialog.Root closeOnOutsideClick={false} open>
   <Dialog.Content class="min-h-96 max-h-[calc(100dvh-10rem)] flex flex-col">
-    <Dialog.Header>
+    <Dialog.Header class="flex-row items-center space-y-0 gap-1.5">
+      {#if !allowPrev}
+        <Button on:click={prev} variant={'link'} class="flex items-center justify-center p-0 h-6">
+          <ChevronLeft />
+        </Button>
+      {/if}
       <Dialog.Title>{steps[currentStep].title}</Dialog.Title>
     </Dialog.Header>
     <div class="flex-grow h-full">
       <slot name="body" {currentStep} {next} {prev} />
     </div>
-    <Dialog.Footer class="flex items-center justify-between">
-      <Button
-        on:click={prev}
-        variant={allowPrev ? 'ghost' : 'default'}
-        class="flex items-center justify-center pl-3"
-        disabled={currentStep <= 0}
-      >
-        <ChevronLeft />
-        <span class="uppercase">prev</span>
-      </Button>
-      <slot name="next" {currentStep}>
-        <Button on:click={next} variant={'default'} class="flex items-center justify-center pr-3">
-          {#if !allowNext}
-            <span class="uppercase">next</span>
-          {:else}
-            <span class="uppercase">finish</span>
-          {/if}
-          <ChevronRight />
-        </Button>
-      </slot>
+    <Dialog.Footer class="">
+      {#if !allowNext}
+        <slot name="next" {currentStep}>
+          <Button
+            on:click={next}
+            variant={'default'}
+            class="flex items-center justify-center pr-3 w-full"
+            disabled={steps[currentStep].disabledNext}
+          >
+            <span class="uppercase">continue</span>
+          </Button>
+        </slot>
+      {:else}
+        <slot name="finish"></slot>
+      {/if}
     </Dialog.Footer>
   </Dialog.Content>
 </Dialog.Root>

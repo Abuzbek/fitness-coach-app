@@ -20,7 +20,6 @@
   const { form: formData, enhance } = form;
 </script>
 
-<h2 class="text-2xl font-bold text-center mb-8">Log in to your account</h2>
 <form method="POST" use:enhance action="?/login" class="space-y-4">
   <Form.Field {form} name="email" class="space-y-2">
     <Form.Control let:attrs>

@@ -1,8 +1,21 @@
 <script lang="ts">
-  import type { PageData } from "./$types";
-  import LoginForm from "./login-form.svelte";
+  import UserHealthDetail, { type ISteps } from '$lib/components/user-health-detail.svelte';
+  import type { PageData } from './$types';
+  import LoginForm from './login-form.svelte';
 
   export let data: PageData;
-  $: ({form} = data)
+  $: ({ form } = data);
+
+  const steps: ISteps[] = [
+    {
+      title: 'Log in to your account',
+      disabledNext: false
+    }
+  ];
 </script>
-<LoginForm data={form}/>
+
+<UserHealthDetail {steps}>
+  <svelte:fragment slot="body">
+    <LoginForm data={form} />
+  </svelte:fragment>
+</UserHealthDetail>
